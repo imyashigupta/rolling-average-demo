@@ -23,6 +23,8 @@ class TimeData {
         int maxTime = 0;
         int minTime = 0;
         int sum = 0;
+        float avg = 0;
+        float result;
 
         for (Map<String, Integer> element : this.data) {
 
@@ -37,14 +39,20 @@ class TimeData {
             }
         }
 
-        int delta = maxTime - minTime;      // calculates timestamps interval
-        float avg = (float)sum/delta;      // calculates average over the time interval
-
-    
-        DecimalFormat result = new DecimalFormat("#.##");       // formatting result to two decimal places
-        return  Float.valueOf(result.format(avg)); 
-             
-
+        
+        try {
+            int delta = maxTime - minTime; // calculates timestamps interval
+            avg = (float)sum/delta;      // calculates average over the time interval
+            DecimalFormat temp = new DecimalFormat("#.##"); // formatting result to two decimal places
+            result = Float.valueOf(temp.format(avg));
+        }
+        catch (NumberFormatException e) {     // handling divide by zero exception
+           return (float)sum;                // min and max timestamps are same
+        
+        }
+        
+        return result;
+        
     }
 
     
