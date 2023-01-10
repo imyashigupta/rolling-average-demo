@@ -127,8 +127,16 @@ public class TimeDataDto {
             timestamps[i] = data.get(i).getTimeStamp();
         }
         Arrays.sort(timestamps);        // sortes the list before checking interval
+        
         int interval = timestamps[1] - timestamps[0];           // array has atleast 2 elements
-        for (int j = 2; j < timestamps.length-1; j++) {
+
+        if(interval==0) {               // same timestamps
+            valid = false;
+            return valid;
+        }
+        
+
+        for (int j = 2; j < timestamps.length; j++) {
             if((timestamps[j] - timestamps[j-1])!=interval){
                 valid=false;
             }
