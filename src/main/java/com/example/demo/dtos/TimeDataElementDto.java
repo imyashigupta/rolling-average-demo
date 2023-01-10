@@ -3,8 +3,6 @@ package com.example.demo.dtos;
 
 import javax.validation.constraints.NotNull;
 
-import org.springframework.validation.annotation.Validated;
-
 
 public class TimeDataElementDto {
     

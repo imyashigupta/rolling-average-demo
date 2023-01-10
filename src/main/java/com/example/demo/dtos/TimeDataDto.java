@@ -1,7 +1,6 @@
 package com.example.demo.dtos;
 
 import java.text.DecimalFormat;
-import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -9,8 +8,6 @@ import java.util.Map;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
-
-import org.springframework.validation.annotation.Validated;
 
 public class TimeDataDto {
 
@@ -32,9 +29,6 @@ public class TimeDataDto {
             data.add(new TimeDataElementDto(element.get("timestamp"), element.get("value")));
         }
         
-        for (int i = 0; i < this.data.size(); i++) {                // DEBUG
-            System.out.println(this.data.get(i).getElement());
-        }
     }
 
     /**
@@ -55,18 +49,17 @@ public class TimeDataDto {
             sum += element.getValue();          // calculates aggregate sum of all values
             
         }
+             
+        int delta = maxTime - minTime; // calculates timestamps interval
 
+        if (delta==0) { // single time stamp
+            return (float) sum; // min and max timestamps are same
+        } 
+
+        avg = (float)sum/delta;      // calculates average over the time interval
+        DecimalFormat temp = new DecimalFormat("#.##"); // formatting result to two decimal places
+        result = Float.valueOf(temp.format(avg));
         
-        try {
-            int delta = maxTime - minTime; // calculates timestamps interval
-            avg = (float)sum/delta;      // calculates average over the time interval
-            DecimalFormat temp = new DecimalFormat("#.##"); // formatting result to two decimal places
-            result = Float.valueOf(temp.format(avg));
-        }
-        catch (NumberFormatException e) {     // handling divide by zero exception
-           return (float)sum;                // min and max timestamps are same
-        
-        }
         
         return result;
         
@@ -88,7 +81,6 @@ public class TimeDataDto {
             }
         }
 
-        System.out.println("max: " + maxTime);          //DEBUG
         return maxTime;
 
     }
@@ -108,7 +100,6 @@ public class TimeDataDto {
             }
         }
 
-        System.out.println("min: " + minTime); // DEBUG
         return minTime;
 
     }
