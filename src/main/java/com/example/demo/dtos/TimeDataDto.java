@@ -1,4 +1,4 @@
-package com.example.demo;
+package com.example.demo.dtos;
 
 import java.text.DecimalFormat;
 import java.time.Duration;
@@ -7,25 +7,29 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 
-class TimeData {
+import org.springframework.validation.annotation.Validated;
+
+public class TimeDataDto {
 
 
-   
-    List<TimeDataElement> data = new ArrayList<TimeDataElement>(); 
+    @Valid
+    @NotNull(message = "Data is required.")
+    private List<TimeDataElementDto> data = new ArrayList<TimeDataElementDto>(); 
 
-    TimeData() {
-    }
 
     /**
      * Constructor to initialise data list.
      * The json object is mapped to a list of TimeDataElement objects
      * @param requestData the json object is mapped a list of TimeDataElement
      */
-    TimeData(Map<String, Integer>[] requestData) {
+    public TimeDataDto(Map<String, Integer>[] requestData) {
+
 
         for (Map<String, Integer> element : requestData) {
-            data.add(new TimeDataElement(element.get("timestamp"), element.get("value")));
+            data.add(new TimeDataElementDto(element.get("timestamp"), element.get("value")));
         }
         
         for (int i = 0; i < this.data.size(); i++) {                // DEBUG
@@ -46,7 +50,7 @@ class TimeData {
         float avg = 0;
         float result;
 
-        for (TimeDataElement element : this.data) {
+        for (TimeDataElementDto element : this.data) {
 
             sum += element.getValue();          // calculates aggregate sum of all values
             
@@ -78,7 +82,7 @@ class TimeData {
 
         int maxTime = 0;
 
-        for (TimeDataElement element : this.data) {
+        for (TimeDataElementDto element : this.data) {
             if ((maxTime == 0) || (element.getTimeStamp() > maxTime)) {
                 maxTime = element.getTimeStamp(); 
             }
@@ -98,7 +102,7 @@ class TimeData {
 
         int minTime = 0;
 
-        for (TimeDataElement element : this.data) {
+        for (TimeDataElementDto element : this.data) {
             if ((minTime == 0) || (element.getTimeStamp() < minTime)) {
                 minTime = element.getTimeStamp();
             }
